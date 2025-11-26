@@ -1,0 +1,125 @@
+[
+  {
+    "id": "executive",
+    "name": "Executive Leadership",
+    "description": "Executive leadership and strategic decision making",
+    "headRole": "CEO",
+    "budget": 500000,
+    "employeeCount": 5,
+    "location": "Headquarters",
+    "functions": [
+      "Strategic planning",
+      "Executive decision making",
+      "Board communications",
+      "Corporate governance"
+    ]
+  },
+  {
+    "id": "engineering",
+    "name": "Engineering",
+    "description": "Software development and technical operations",
+    "headRole": "VP of Engineering",
+    "budget": 2500000,
+    "employeeCount": 45,
+    "location": "Main Campus",
+    "functions": [
+      "Software development",
+      "System architecture",
+      "Code quality assurance",
+      "Technical documentation",
+      "DevOps operations"
+    ],
+    "subDepartments": [
+      {
+        "id": "frontend",
+        "name": "Frontend Development",
+        "headRole": "Frontend Manager",
+        "employeeCount": 12
+      },
+      {
+        "id": "backend",
+        "name": "Backend Development",
+        "headRole": "Backend Manager",
+        "employeeCount": 15
+      },
+      {
+        "id": "devops",
+        "name": "DevOps",
+        "headRole": "DevOps Manager",
+        "employeeCount": 8
+      },
+      {
+        "id": "qa",
+        "name": "Quality Assurance",
+        "headRole": "QA Lead",
+        "employeeCount": 10
+      }
+    ]
+  },
+  {
+    "id": "product",
+    "name": "Product",
+    "description": "Product strategy, design, and analytics",
+    "headRole": "VP of Product",
+    "budget": 1200000,
+    "employeeCount": 18,
+    "location": "Main Campus",
+    "functions": [
+      "Product strategy",
+      "User experience design",
+      "Product analytics",
+      "Market research",
+      "Feature prioritization"
+    ]
+  },
+  {
+    "id": "sales",
+    "name": "Sales & Marketing",
+    "description": "Sales operations and marketing activities",
+    "headRole": "VP of Sales",
+    "budget": 1800000,
+    "employeeCount": 28,
+    "location": "Downtown Office",
+    "functions": [
+      "Lead generation",
+      "Customer relationship management",
+      "Sales forecasting",
+      "Marketing campaigns",
+      "Brand management"
+    ]
+  },
+  {
+    "id": "hr",
+    "name": "Human Resources",
+    "description": "Human resource management and employee relations",
+    "headRole": "HR Director",
+    "budget": 800000,
+    "employeeCount": 12,
+    "location": "Headquarters",
+    "functions": [
+      "Recruitment and hiring",
+      "Employee relations",
+      "Payroll administration",
+      "Benefits management",
+      "Performance management",
+      "Training and development"
+    ]
+  },
+  {
+    "id": "finance",
+    "name": "Finance & Operations",
+    "description": "Financial management and operational support",
+    "headRole": "CFO",
+    "budget": 950000,
+    "employeeCount": 15,
+    "location": "Headquarters",
+    "functions": [
+      "Financial planning",
+      "Budget management",
+      "Accounting operations",
+      "Payroll processing",
+      "Expense management",
+      "Legal compliance"
+    ]
+  }
+]

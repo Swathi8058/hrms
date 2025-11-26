@@ -1,0 +1,243 @@
+{
+  "roles": [
+    {
+      "id": "super-admin",
+      "name": "Super Administrator",
+      "description": "Full system access with all permissions",
+      "level": 1,
+      "permissions": [
+        "system.*",
+        "users.*",
+        "employees.*",
+        "payroll.*",
+        "attendance.*",
+        "expenses.*",
+        "reports.*",
+        "settings.*"
+      ],
+      "inheritsFrom": []
+    },
+    {
+      "id": "hr-admin",
+      "name": "HR Administrator",
+      "description": "Full HR operations access",
+      "level": 2,
+      "permissions": [
+        "employees.*",
+        "payroll.*",
+        "attendance.*",
+        "expenses.approve",
+        "reports.*",
+        "users.manage",
+        "leave.*",
+        "performance.*",
+        "training.*"
+      ],
+      "inheritsFrom": []
+    },
+    {
+      "id": "department-head",
+      "name": "Department Head",
+      "description": "Management access for their department",
+      "level": 3,
+      "permissions": [
+        "employees.view.department",
+        "employees.edit.department",
+        "attendance.view.department",
+        "attendance.approve.department",
+        "expenses.approve.department",
+        "leave.approve.department",
+        "reports.department",
+        "performance.review.department"
+      ],
+      "inheritsFrom": ["employee"]
+    },
+    {
+      "id": "manager",
+      "name": "Manager",
+      "description": "Team management access",
+      "level": 4,
+      "permissions": [
+        "employees.view.team",
+        "employees.edit.team",
+        "attendance.view.team",
+        "attendance.approve.team",
+        "expenses.approve.team",
+        "leave.approve.team",
+        "reports.team",
+        "performance.review.team"
+      ],
+      "inheritsFrom": ["employee"]
+    },
+    {
+      "id": "hr-specialist",
+      "name": "HR Specialist",
+      "description": "Specialized HR functions",
+      "level": 4,
+      "permissions": [
+        "employees.view.all",
+        "payroll.view",
+        "attendance.view.all",
+        "leave.manage",
+        "performance.manage",
+        "training.manage",
+        "reports.generate"
+      ],
+      "inheritsFrom": ["employee"]
+    },
+    {
+      "id": "payroll-admin",
+      "name": "Payroll Administrator",
+      "description": "Payroll processing access",
+      "level": 3,
+      "permissions": [
+        "payroll.*",
+        "employees.view.payroll",
+        "reports.payroll",
+        "settings.payroll"
+      ],
+      "inheritsFrom": []
+    },
+    {
+      "id": "finance-admin",
+      "name": "Finance Administrator",
+      "description": "Finance and expense management",
+      "level": 3,
+      "permissions": [
+        "expenses.*",
+        "payroll.view",
+        "reports.finance",
+        "settings.finance"
+      ],
+      "inheritsFrom": []
+    },
+    {
+      "id": "employee",
+      "name": "Employee",
+      "description": "Basic employee access",
+      "level": 5,
+      "permissions": [
+        "employees.view.self",
+        "employees.edit.self",
+        "attendance.self",
+        "leave.apply",
+        "leave.view.self",
+        "expenses.apply",
+        "expenses.view.self",
+        "performance.view.self",
+        "training.view.self"
+      ],
+      "inheritsFrom": []
+    }
+  ],
+  "permissions": {
+    "system": {
+      "system.config": "System configuration",
+      "system.backup": "System backup operations",
+      "system.logs": "Access system logs",
+      "system.maintenance": "System maintenance"
+    },
+    "users": {
+      "users.create": "Create user accounts",
+      "users.view": "View user information",
+      "users.edit": "Edit user accounts",
+      "users.delete": "Delete user accounts",
+      "users.manage": "Full user management"
+    },
+    "employees": {
+      "employees.create": "Create employee records",
+      "employees.view.self": "View own employee record",
+      "employees.view.team": "View team member records",
+      "employees.view.department": "View department employee records",
+      "employees.view.all": "View all employee records",
+      "employees.edit.self": "Edit own employee record",
+      "employees.edit.team": "Edit team member records",
+      "employees.edit.department": "Edit department employee records",
+      "employees.edit.all": "Edit all employee records",
+      "employees.delete": "Delete employee records",
+      "employees.view.payroll": "View payroll information"
+    },
+    "payroll": {
+      "payroll.view": "View payroll data",
+      "payroll.process": "Process payroll",
+      "payroll.approve": "Approve payroll changes",
+      "payroll.generate": "Generate payslips",
+      "payroll.export": "Export payroll data"
+    },
+    "attendance": {
+      "attendance.self": "Manage own attendance",
+      "attendance.view.team": "View team attendance",
+      "attendance.view.department": "View department attendance",
+      "attendance.view.all": "View all attendance records",
+      "attendance.approve.team": "Approve team attendance",
+      "attendance.approve.department": "Approve department attendance",
+      "attendance.manage": "Full attendance management"
+    },
+    "expenses": {
+      "expenses.apply": "Submit expense claims",
+      "expenses.view.self": "View own expense claims",
+      "expenses.view.team": "View team expense claims",
+      "expenses.view.department": "View department expense claims",
+      "expenses.view.all": "View all expense claims",
+      "expenses.approve.team": "Approve team expense claims",
+      "expenses.approve.department": "Approve department expense claims",
+      "expenses.approve.all": "Approve all expense claims",
+      "expenses.process": "Process expense reimbursements"
+    },
+    "leave": {
+      "leave.apply": "Apply for leave",
+      "leave.view.self": "View own leave records",
+      "leave.view.team": "View team leave records",
+      "leave.view.all": "View all leave records",
+      "leave.approve.team": "Approve team leave requests",
+      "leave.approve.department": "Approve department leave requests",
+      "leave.approve.all": "Approve all leave requests",
+      "leave.manage": "Full leave management"
+    },
+    "performance": {
+      "performance.view.self": "View own performance reviews",
+      "performance.view.team": "View team performance reviews",
+      "performance.view.all": "View all performance reviews",
+      "performance.review.team": "Conduct team performance reviews",
+      "performance.review.all": "Conduct all performance reviews",
+      "performance.manage": "Full performance management"
+    },
+    "training": {
+      "training.view.self": "View own training records",
+      "training.view.all": "View all training records",
+      "training.assign": "Assign training programs",
+      "training.manage": "Full training management"
+    },
+    "reports": {
+      "reports.view": "View reports",
+      "reports.generate": "Generate reports",
+      "reports.export": "Export reports",
+      "reports.team": "View team reports",
+      "reports.department": "View department reports",
+      "reports.payroll": "View payroll reports",
+      "reports.finance": "View finance reports"
+    },
+    "settings": {
+      "settings.view": "View system settings",
+      "settings.edit": "Edit system settings",
+      "settings.payroll": "Edit payroll settings",
+      "settings.finance": "Edit finance settings"
+    }
+  },
+  "roleAssignments": {
+    "CEO": "super-admin",
+    "VP Engineering": "department-head",
+    "VP Product": "department-head",
+    "VP Sales": "department-head",
+    "HR Director": "hr-admin",
+    "CFO": "finance-admin",
+    "Engineering Director": "manager",
+    "HR Manager": "hr-specialist",
+    "Payroll Manager": "payroll-admin",
+    "Finance Manager": "manager",
+    "Team Lead": "manager",
+    "Developer": "employee",
+    "Analyst": "employee",
+    "Sales Associate": "employee"
+  }
+}

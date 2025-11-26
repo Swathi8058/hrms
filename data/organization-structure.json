@@ -1,0 +1,96 @@
+{
+  "organization": {
+    "name": "TechCorp Solutions",
+    "type": "Technology Company",
+    "headquarters": "San Francisco, CA",
+    "established": "2015",
+    "structure": {
+      "levels": [
+        "CEO",
+        "VP/Senior Director",
+        "Director/Manager",
+        "Senior Lead/Team Lead",
+        "Senior Developer/Analyst",
+        "Developer/Analyst",
+        "Junior Developer/Analyst"
+      ]
+    }
+  },
+  "departments": [
+    {
+      "id": "executive",
+      "name": "Executive Leadership",
+      "head": "CEO",
+      "subDepartments": [],
+      "teams": ["Executive Team"]
+    },
+    {
+      "id": "engineering",
+      "name": "Engineering",
+      "head": "VP of Engineering",
+      "subDepartments": ["frontend", "backend", "devops", "qa"],
+      "teams": ["Frontend Team", "Backend Team", "DevOps Team", "QA Team"]
+    },
+    {
+      "id": "product",
+      "name": "Product",
+      "head": "VP of Product",
+      "subDepartments": ["design", "product-management"],
+      "teams": ["UX/UI Design", "Product Management", "Data Analytics"]
+    },
+    {
+      "id": "sales",
+      "name": "Sales & Marketing",
+      "head": "VP of Sales",
+      "subDepartments": ["sales", "marketing"],
+      "teams": ["Enterprise Sales", "SMB Sales", "Marketing", "Content Team"]
+    },
+    {
+      "id": "hr",
+      "name": "Human Resources",
+      "head": "HR Director",
+      "subDepartments": ["recruitment", "employee-relations"],
+      "teams": ["Recruitment", "Employee Relations", "HR Operations"]
+    },
+    {
+      "id": "finance",
+      "name": "Finance & Operations",
+      "head": "CFO",
+      "subDepartments": ["finance", "operations"],
+      "teams": ["Accounting", "Payroll", "Operations", "Legal"]
+    }
+  ],
+  "hierarchy": {
+    "CEO": {
+      "directReports": ["VP Engineering", "VP Product", "VP Sales", "HR Director", "CFO"],
+      "level": 1
+    },
+    "VP Engineering": {
+      "directReports": ["Engineering Director", "Frontend Manager", "Backend Manager", "DevOps Manager"],
+      "level": 2
+    },
+    "VP Product": {
+      "directReports": ["Product Director", "Design Manager", "Data Manager"],
+      "level": 2
+    },
+    "VP Sales": {
+      "directReports": ["Sales Director", "Marketing Manager"],
+      "level": 2
+    },
+    "HR Director": {
+      "directReports": ["HR Manager", "Recruitment Lead"],
+      "level": 2
+    },
+    "CFO": {
+      "directReports": ["Finance Manager", "Operations Manager"],
+      "level": 2
+    }
+  },
+  "reportingChains": {
+    "engineering": ["CEO", "VP Engineering", "Engineering Director", "Team Leads", "Developers"],
+    "product": ["CEO", "VP Product", "Product Director", "Team Leads", "Analysts"],
+    "sales": ["CEO", "VP Sales", "Sales Director", "Account Executives", "Sales Associates"],
+    "hr": ["CEO", "HR Director", "HR Managers", "HR Specialists"],
+    "finance": ["CEO", "CFO", "Finance Managers", "Finance Specialists"]
+  }
+}
