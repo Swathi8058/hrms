@@ -103,6 +103,15 @@ class ApiService {
     return this.put('/employees/profile', data);
   }
 
+  // Add createEmployee method here (after updateEmployee)
+  async createEmployee(data: any) {
+    return this.post('/employees', data);
+  }
+
+  async getManagersByDepartment(departmentId: string) {
+    return this.get(`/employees/managers/${departmentId}`);
+  }
+
   // Department methods
   async getDepartments() {
     return this.get('/departments');

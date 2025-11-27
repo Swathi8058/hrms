@@ -17,6 +17,7 @@ export interface Employee {
   gender: string;
   address: Address;
   department: string;
+  departmentId: string;
   position: string;
   role: string;
   managerId?: string | null;

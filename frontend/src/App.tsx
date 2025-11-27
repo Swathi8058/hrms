@@ -11,6 +11,8 @@ import DashboardPage from './pages/DashboardPage';
 import EmployeesPage from './pages/EmployeesPage';
 import OrganizationPage from './pages/OrganizationPage';
 import ProfilePage from './pages/ProfilePage';
+import AddEmployeePage from './pages/AddEmployeePage';
+import EditEmployeePage from './pages/EditEmployeePage';
 
 // Route protection component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -54,6 +56,8 @@ function App() {
                         <Route path="/" element={<Navigate to="/dashboard" replace />} />
                         {/* Placeholder routes - will be implemented */}
                         <Route path="/employees" element={<EmployeesPage />} />
+                        <Route path="/employees/new" element={<AddEmployeePage />} />
+                        <Route path="/employees/:id/edit" element={<EditEmployeePage />} />
                         <Route path="/organization" element={<OrganizationPage />} />
                         <Route path="/departments" element={<div>Departments Page - Coming Soon</div>} />
                         <Route path="/attendance" element={<div>Attendance Page - Coming Soon</div>} />

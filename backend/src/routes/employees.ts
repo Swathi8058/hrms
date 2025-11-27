@@ -147,6 +147,94 @@ router.get('/', authorize('employees.view.all'), async (req, res) => {
   }
 });
 
+// Create new employee
+router.post('/', authorize('employees.create'), async (req, res) => {
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      dateOfBirth,
+      gender,
+      departmentId,
+      position,
+      roleId,
+      hireDate,
+      employmentType,
+      salary,
+      status,
+      managerId,
+      address,
+    } = req.body;
+
+    // Generate unique employee ID (EMP001, EMP002, etc.)
+    const idQuery = await query("SELECT id FROM employees ORDER BY id DESC LIMIT 1");
+    let nextId = 1;
+    if (idQuery.rows.length > 0) {
+      const lastId = idQuery.rows[0].id;
+      const numPart = parseInt(lastId.replace('EMP', ''));
+      nextId = numPart + 1;
+    }
+    const employeeId = `EMP${nextId.toString().padStart(3, '0')}`;
+
+    // Generate employee ID (TC001, TC002, etc.)
+    const employeeIdQuery = await query("SELECT employee_id FROM employees ORDER BY employee_id DESC LIMIT 1");
+    let nextEmployeeId = 1;
+    if (employeeIdQuery.rows.length > 0) {
+      const lastEmployeeId = employeeIdQuery.rows[0].employee_id;
+      const numPart = parseInt(lastEmployeeId.replace('TC', ''));
+      nextEmployeeId = numPart + 1;
+    }
+    const uniqueEmployeeId = `TC${nextEmployeeId.toString().padStart(3, '0')}`;
+
+    const insertQuery = `
+      INSERT INTO employees (
+        id, employee_id, first_name, last_name, email, phone,
+        date_of_birth, gender, department_id, position, role_id,
+        hire_date, employment_type, salary, status,
+        manager_id, address, created_at, updated_at
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+      ) RETURNING *
+    `;
+
+    const params = [
+      employeeId,
+      uniqueEmployeeId,
+      firstName,
+      lastName,
+      email,
+      phone || null,
+      dateOfBirth || null,
+      gender || null,
+      departmentId,
+      position,
+      roleId || null,
+      hireDate,
+      employmentType,
+      salary,
+      status || 'Active',
+      managerId || null,
+      address
+    ];
+
+    const result = await query(insertQuery, params);
+
+    res.status(201).json({
+      success: true,
+      data: result.rows[0],
+      message: 'Employee created successfully',
+    } as ApiResponse);
+  } catch (error) {
+    console.error('Create employee error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create employee',
+    } as ApiResponse);
+  }
+});
+
 // Get employee by ID
 router.get('/:id', authorize('employees.view.self'), async (req, res) => {
   try {
@@ -298,25 +386,73 @@ router.put('/:id', authorize('employees.edit.self'), async (req, res) => {
       }
     }
 
+    // Map frontend field names to database column names and filter out invalid fields
+    const fieldMapping: { [key: string]: string } = {
+      firstName: 'first_name',
+      lastName: 'last_name',
+      email: 'email',
+      phone: 'phone',
+      dateOfBirth: 'date_of_birth',
+      gender: 'gender',
+      address: 'address',
+      departmentId: 'department_id',
+      position: 'position',
+      roleId: 'role_id',
+      managerId: 'manager_id',
+      hireDate: 'hire_date',
+      employmentType: 'employment_type',
+      salary: 'salary',
+      status: 'status',
+      emergencyContact: 'emergency_contact',
+      bankDetails: 'bank_details',
+      skills: 'skills',
+      education: 'education',
+      certifications: 'certifications'
+    };
+
+    // Filter and map the updates
+    const validUpdates: { [key: string]: any } = {};
+    Object.keys(updates).forEach(key => {
+      if (fieldMapping[key] && updates[key] !== undefined) {
+        let value = updates[key];
+
+        // Handle special cases
+        if (key === 'salary' && value !== null && value !== '') {
+          value = parseFloat(value);
+        }
+        if (key === 'hireDate' && value) {
+          value = new Date(value).toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+        }
+        if (key === 'dateOfBirth' && value) {
+          value = new Date(value).toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+        }
+
+        // Convert empty strings to null for optional fields
+        if (value === '' && ['phone', 'gender', 'roleId', 'managerId'].includes(key)) {
+          value = null;
+        }
+
+        validUpdates[fieldMapping[key]] = value;
+      }
+    });
+
+    if (Object.keys(validUpdates).length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update',
+      } as ApiResponse);
+    }
+
     // Build update query dynamically
     const updateFields = [];
     const params = [];
     let paramIndex = 1;
 
-    Object.keys(updates).forEach(key => {
-      if (updates[key] !== undefined) {
-        updateFields.push(`${key} = $${paramIndex}`);
-        params.push(updates[key]);
-        paramIndex++;
-      }
+    Object.keys(validUpdates).forEach(key => {
+      updateFields.push(`${key} = $${paramIndex}`);
+      params.push(validUpdates[key]);
+      paramIndex++;
     });
-
-    if (updateFields.length === 0) {
-      return res.status(400).json({
-        success: false,
-        error: 'No fields to update',
-      } as ApiResponse);
-    }
 
     updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
 
@@ -347,6 +483,60 @@ router.put('/:id', authorize('employees.edit.self'), async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to update employee',
+    } as ApiResponse);
+  }
+});
+
+// Get managers by department
+router.get('/managers/:departmentId', authorize('employees.view.all'), async (req, res) => {
+  try {
+    const { departmentId } = req.params;
+
+    const managersQuery = `
+      SELECT
+        e.id,
+        e.first_name,
+        e.last_name,
+        e.position,
+        e.role_id
+      FROM employees e
+      WHERE e.department_id = $1
+        AND e.status = 'Active'
+        AND e.position IN (
+          'CEO', 'VP of Engineering', 'VP of Product', 'VP of Sales',
+          'HR Director', 'CFO', 'Engineering Director', 'HR Manager',
+          'Payroll Manager', 'Finance Manager', 'Team Lead'
+        )
+      ORDER BY
+        CASE
+          WHEN e.position = 'CEO' THEN 1
+          WHEN e.position LIKE 'VP%' THEN 2
+          WHEN e.position LIKE '%Director' THEN 3
+          WHEN e.position LIKE '%Manager' THEN 4
+          WHEN e.position = 'Team Lead' THEN 5
+          ELSE 6
+        END,
+        e.first_name, e.last_name
+    `;
+
+    const result = await query(managersQuery, [departmentId]);
+
+    const managers = result.rows.map(row => ({
+      id: row.id,
+      name: `${row.first_name} ${row.last_name}`,
+      position: row.position,
+      roleId: row.role_id,
+    }));
+
+    res.json({
+      success: true,
+      data: managers,
+    } as ApiResponse);
+  } catch (error) {
+    console.error('Get managers error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get managers',
     } as ApiResponse);
   }
 });
